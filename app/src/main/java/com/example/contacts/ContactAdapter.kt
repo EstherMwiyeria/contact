@@ -1,50 +1,41 @@
 package com.example.contacts
 
-import androidx.recyclerview.widget.RecyclerView
 
-
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-//import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.contacts.databinding.ContactListItemBinding
-//import com.example.mycontacts.databinding.ContactListItemBinding
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.CropCircleTransformation
 
- class ContactAdapter(var contactList: List<ContactData>) : RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() {
+class ContactAdapter(var ContactList:List<ContactData>) : RecyclerView.Adapter<ContactViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
-        val binding =
-            ContactListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ContactListItemBinding.inflate(LayoutInflater.from(parent.context),parent ,false)
         return ContactViewHolder(binding)
     }
-
+    override fun getItemCount(): Int {
+        return ContactList.size
+    }
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
-        val currentContact = contactList[position]
-        val binding = holder.binding
-//        binding.ivAvatar.tag=currentContact.image
-//        binding.tvnPhoneNumber.text= currentContact.phoneNumber
-//        binding.tvEmail.text = currentContact.email
-//        binding.tvName.text = currentContact.names
+        var currentContact =ContactList.get(position)
+        var  binding=holder.binding
+        binding.ivAvatar.tag=currentContact.image
+        binding.tilName.text=currentContact.names
+        binding.tilphoneNumber.text=currentContact.phoneNumber
+        binding.tilEmail.text =currentContact.email
 
-        binding.ivAvatar.tag = currentContact.image
-        binding.tilphoneNumber.text = currentContact.phoneNumber
-        binding.tilEmail.text = currentContact.email
-        binding.tilName.text = currentContact.names
+        binding.tvbutton.setOnClickListener {
+            val intent = Intent(holder.itemView.context, MainActivity2::class.java)
+            holder.itemView.context.startActivity(intent)
+        }
         Picasso
             .get()
             .load(currentContact.image)
-            .resize(80, 80)
+            .resize(80,80)
             .centerCrop()
-            .centerInside()
             .transform(CropCircleTransformation())
-            .into(binding.ivAvatar)
-    }
-
-override fun getItemCount(): Int {
-    return contactList.size
+            .into(binding.ivAvatar) }
 }
-    inner class ContactViewHolder(val binding: ContactListItemBinding) : RecyclerView.ViewHolder(binding.root)
-
-
-
-}
+class ContactViewHolder( var binding:ContactListItemBinding):ViewHolder(binding.root)
